@@ -57,6 +57,6 @@ let customImage = SFSymbol.star_fill
 
 ## Usage Examples
 
-For usage examples and code snippets, please refer to the [Usage Examples](Documentation/UsageExamples.md) section.
+For usage examples and code snippets, please refer to the [Usage Examples](UsageExamples.md) section.
 
 For any questions, issues, or suggestions, don't hesitate to reach out on the [SFSymbol GitHub repository](https://github.com/LuckeyLogic/SFSymbol). Happy coding!
