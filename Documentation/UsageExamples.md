@@ -61,6 +61,6 @@ struct ContentView: View {
 
 ## Advanced Customization
 
-For advanced customization options and more examples, please refer to the full documentation in the [Documentation](Documentation/Usage.md) section.
+For advanced customization options and more examples, please refer to the full documentation in the [Documentation](Usage.md) section.
 
 Have a specific use case or need further assistance? Don't hesitate to reach out on the [SFSymbol GitHub repository](https://github.com/LuckeyLogic/SFSymbol). Happy coding!
