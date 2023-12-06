@@ -37,5 +37,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
                                           
 ### Security
+
+## [1.0.1] - 2023-12-06
+
+### Added
+
+### Changed
+- Updated `SFSymbol.swift` to make the enum and its members `public` for external access.
+- Modified `Package.swift` to specify platforms and Swift version for broader compatibility.
+                                          
+### Deprecated
+                                          
+### Removed
+                                          
+### Fixed
+                                          
+### Security
                                           
 > **Note:** Subsequent releases should follow the same structure, listing changes under respective versions and categories like 'Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', and 'Security'.
