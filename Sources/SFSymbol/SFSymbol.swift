@@ -27,10 +27,10 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-enum SFSymbol: String {
+public enum SFSymbol: String {
 
     /// Returns an `Image` instance for the corresponding SF Symbol.
-    var image: Image {
+    public var image: Image {
         return Image(systemName: self.rawValue)
     }
 
@@ -5391,7 +5391,7 @@ enum SFSymbol: String {
     // MARK: - Usage Examples
     
     /// Usage examples demonstrating how to access SF Symbols using the enum.
-    static let examples: [Image] = [
+    public static let examples: [Image] = [
         SFSymbol.square_and_arrow_up        .image,
         SFSymbol.square_and_arrow_up_fill   .image,
         SFSymbol._4k_tv                     .image,
