@@ -54,4 +54,17 @@ SFSymbol is available under the [MIT License](LICENSE). You are free to use this
 
 ## Contributions
 
-Contributions to SFSymbol are welcome! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request.
+Contributions to SFSymbol are welcome! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request. Please refer to the [Contribution Guide](CONTRIBUTING.md) for detailed instructions.
+
+## Connect with Luckey Logic
+
+Stay updated and connect with us on our website and social media platforms:
+
+- Website: [Luckey Logic](https://luckeylogic.com/)
+- [Instagram](https://www.instagram.com/luckeylogic)
+- [Facebook](https://www.facebook.com/luckeylogic)
+- [TikTok](https://www.tiktok.com/@luckeylogic)
+- [YouTube](https://www.youtube.com/channel/UCYpu2dcEZ6VRi_DZtKV34ZQ)
+- [LinkedIn](https://www.linkedin.com/company/luckeylogic)
+
+Follow us for the latest updates, insights, and more.

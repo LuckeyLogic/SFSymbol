@@ -4,7 +4,7 @@
 //  SFSymbol.swift
 //
 //  Created by Miguel Brown on 5/9/22.
-//  Copyright © 2022 Luckey Logic. All rights reserved.
+//  Copyright © 2022-2024 Luckey Logic. All rights reserved.
 //
 
 
