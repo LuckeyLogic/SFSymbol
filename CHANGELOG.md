@@ -53,5 +53,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
                                           
 ### Security
+
+## [1.1.0] - 2023-12-06
+
+### Added
+- Updated 9 new symbols to SFSybol library that were added by Apple
+- Implemented a '.description' property for SFSymbol that returns the string of the symbol
+
+### Changed
+- None
                                           
+### Deprecated
+- None
+
+### Removed
+- None
+
+### Fixed
+- None
+
+### Security
+- None
+
 > **Note:** Subsequent releases should follow the same structure, listing changes under respective versions and categories like 'Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', and 'Security'.
