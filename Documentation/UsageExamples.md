@@ -1,10 +1,27 @@
 # Usage Examples
 
-This section provides usage examples and code snippets to help you get started with SFSymbol in your projects. Below, you'll find examples of how to use SFSymbol for various tasks, such as creating images, setting colors, and customizing symbols to fit your app's design.
+Examples of using both library products. Pick whichever matches your import.
 
 ## Creating an Image
 
-You can easily create an `Image` instance from an SFSymbol using the `.image` property. This allows you to display SF Symbols in your SwiftUI views:
+### `SFSymbolKit` (dot-notation)
+
+```swift
+import SwiftUI
+import SFSymbolKit
+
+struct ContentView: View {
+    var body: some View {
+        SFSymbol.star.fill.image
+            .resizable()
+            .scaledToFit()
+            .foregroundColor(.blue)
+            .frame(width: 50, height: 50)
+    }
+}
+```
+
+### `SFSymbol` (legacy underscore)
 
 ```swift
 import SwiftUI
@@ -21,46 +38,74 @@ struct ContentView: View {
 }
 ```
 
-## Customizing Colors
-
-SFSymbol symbols are customizable. You can set the foreground color using the `.foregroundColor` modifier:
+## Customizing color
 
 ```swift
-import SwiftUI
-import SFSymbol
+SFSymbol.heart.fill.image                 // SFSymbolKit
+    .foregroundStyle(.red)
 
-struct ContentView: View {
-    var body: some View {
-        SFSymbol.heart_fill.image
-            .resizable()
-            .scaledToFit()
-            .foregroundColor(.red) // Set the symbol's color
-            .frame(width: 50, height: 50)
-    }
+SFSymbol.heart_fill.image                 // SFSymbol (legacy)
+    .foregroundStyle(.red)
+```
+
+## Multi-component paths
+
+`SFSymbolKit` reads exactly like the SF Symbols app:
+
+```swift
+SFSymbol.square.and.arrow.up.image                          // "square.and.arrow.up"
+SFSymbol.square.and.arrow.up.fill.image                     // "square.and.arrow.up.fill"
+SFSymbol.person.crop.circle.badge.checkmark.image           // "person.crop.circle.badge.checkmark"
+```
+
+The legacy equivalents:
+
+```swift
+SFSymbol.square_and_arrow_up.image
+SFSymbol.square_and_arrow_up_fill.image
+SFSymbol.person_crop_circle_badge_checkmark.image
+```
+
+## Reading the symbol name (e.g. for UIKit/AppKit interop)
+
+```swift
+let name: String = SFSymbol.bell.fill.name              // SFSymbolKit  -> "bell.fill"
+let name: String = SFSymbol.bell_fill.description       // SFSymbol     -> "bell.fill"
+
+UIImage(systemName: name)
+```
+
+## Edge cases
+
+```swift
+// Leading digit
+SFSymbol._4k.tv.image           // SFSymbolKit
+SFSymbol._4k_tv.image           // SFSymbol
+
+// Swift keyword
+SFSymbol.`repeat`.image         // SFSymbolKit
+SFSymbol._repeat.image          // SFSymbol
+
+// "doc.text.image" — separate symbol distinct from "doc.text"
+SFSymbol.doc.text.image_.image  // SFSymbolKit  -> Image for "doc.text.image"
+SFSymbol.doc_text_image.image   // SFSymbol     -> same
+```
+
+## Compile-time availability (`SFSymbolKit` only)
+
+Symbols introduced in SF Symbols 6 / 7 are gated to iOS 18 / iOS 19 respectively. If your deployment target is too low, the compiler tells you:
+
+```swift
+@available(iOS 18.0, *)
+func newSymbol() -> Image {
+    SFSymbol.apple.image.playground.image      // OK on iOS 18+
 }
 ```
 
-## Dot Notation
+The legacy `SFSymbol` enum is annotated only at the type level (`iOS 13.0+`), so newer symbols compile but render blank on older OS versions.
 
-Access symbols using dot notation for improved readability and discoverability:
+## More
 
-```swift
-import SwiftUI
-import SFSymbol
-
-struct ContentView: View {
-    var body: some View {
-        SFSymbol.leaf.image // Access a symbol with dot notation
-            .resizable()
-            .scaledToFit()
-            .foregroundColor(.green)
-            .frame(width: 50, height: 50)
-    }
-}
-```
-
-## Advanced Customization
-
-For advanced customization options and more examples, please refer to the full documentation in the [Documentation](Usage.md) section.
-
-Have a specific use case or need further assistance? Don't hesitate to reach out on the [SFSymbol GitHub repository](https://github.com/LuckeyLogic/SFSymbol). Happy coding!
+- [Installation](Installation.md)
+- [Usage](Usage.md)
+- [Migration guide (legacy → SFSymbolKit)](Migration.md)

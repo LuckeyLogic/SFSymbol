@@ -1,77 +1,79 @@
 # SFSymbol Installation Guide
 
-This guide provides step-by-step instructions on how to add the SFSymbol Swift package to your Xcode project. SFSymbol simplifies access to Apple's SF Symbols library, offering type-safe and dot-notation access to a wide range of icons for iOS, macOS, watchOS, and tvOS development.
+This package ships **two library products** from the same repository. Pick whichever API style you prefer:
+
+- **`SFSymbol`** — flat enum, underscore names: `SFSymbol.star_fill.image`
+- **`SFSymbolKit`** — strict, dot-notation: `SFSymbol.star.fill.image`
+
+Both are kept up to date with the latest SF Symbols release (currently 7.2). Pick one per target — they should not be imported into the same Swift file.
 
 ## Prerequisites
 
-Before you begin, make sure you have the following prerequisites:
+- Xcode 15 or later (Swift 5.9+).
+- Minimum deployment targets: iOS 13, macOS 11, watchOS 6, tvOS 13.
 
-- Xcode installed on your development machine.
+## Adding the package via Xcode
 
-## Steps to Install SFSymbol
+1. **Open your Xcode project**.
+2. **File → Add Package Dependencies…**
+3. Enter the repository URL:
+   ```
+   https://github.com/LuckeyLogic/SFSymbol.git
+   ```
+4. Pick a version rule (e.g. **Up to Next Major** from `2.0.0`) and click **Add Package**.
+5. In the **Choose Package Products** sheet, check **one** of:
+   - `SFSymbol` (legacy, underscore API), or
+   - `SFSymbolKit` (new, dot-notation API)
+6. Click **Add Package**.
 
-Follow these steps to add SFSymbol as a dependency in your Xcode project:
+If you're migrating an existing app from the old API, see [Migration.md](Migration.md).
 
-1. **Open Your Xcode Project**:
-   - Launch Xcode and open your project.
+## Adding the package via `Package.swift`
 
-2. **Navigate to the Project Settings**:
-   - In the Xcode project navigator, select your project to open its settings.
+```swift
+let package = Package(
+    name: "MyApp",
+    dependencies: [
+        .package(url: "https://github.com/LuckeyLogic/SFSymbol", from: "2.0.0"),
+    ],
+    targets: [
+        .target(name: "MyApp", dependencies: [
+            // Pick ONE of these:
+            .product(name: "SFSymbol",    package: "SFSymbol"),  // legacy
+            .product(name: "SFSymbolKit", package: "SFSymbol"),  // new
+        ]),
+    ]
+)
+```
 
-3. **Select Your Target**:
-   - In the project settings, select the target where you want to use SFSymbol.
+## Importing and using
 
-4. **Open the Swift Package Dependencies Tab**:
-   - Go to the "Swift Packages" tab.
+### Legacy API (`SFSymbol`)
 
-5. **Add SFSymbol Dependency**:
-   - Click the "+" button to add a package dependency.
+```swift
+import SFSymbol
 
-6. **Enter the Package URL**:
-   - In the "Choose Package Repository" dialog, enter the following URL:
-     ```
-     https://github.com/LuckeyLogic/SFSymbol.git
-     ```
+let starImage = SFSymbol.star_fill.image
+```
 
-7. **Specify the Version**:
-   - Choose the version of SFSymbol that you want to use. You can select a specific version or leave it as "Up to Next Major."
+### New API (`SFSymbolKit`)
 
-8. **Add the Dependency**:
-   - Click the "Add Package" button.
+```swift
+import SFSymbolKit
 
-9. **Confirmation**:
-   - Xcode will fetch the SFSymbol package and add it to your project. You'll see it listed under "Swift Package Dependencies."
+let starImage = SFSymbol.star.fill.image
+```
 
-10. **Import SFSymbol**:
-    - In your Swift files where you want to use SFSymbol, import the SFSymbol module at the top of your file:
-      ```swift
-      import SFSymbol
-      ```
+## Updating
 
-11. **Usage**:
-    - You can now access SF Symbols using dot notation, such as:
-      ```swift
-      let starImage = SFSymbol.star_fill.image
-      ```
+To pull a newer version of the package, in Xcode: **File → Packages → Update to Latest Package Versions**. Or in `Package.swift`, run `swift package update`.
 
-12. **Build and Run**:
-    - Build and run your project, and you can start using SF Symbols with SFSymbol.
+For the package maintainer regenerating against a new SF Symbols release, see the [README](../README.md#updating-to-a-new-sf-symbols-release).
 
-## Updating SFSymbol
+## Troubleshooting
 
-To update SFSymbol to a newer version in the future, follow these steps:
+- **"No such module 'SFSymbol'"** — make sure you ticked the right product (or both, but in different files) in the Choose Package Products sheet.
+- **`Image(systemName:)` warning on macOS 10.15** — this package requires macOS 11 because SwiftUI's `Image(systemName:)` initializer is only available from macOS 11.0.
+- **Symbol not found at runtime (renders blank)** — confirm the SF Symbol name in the SF Symbols app and that your deployment target meets the symbol's `@available` requirement (only `SFSymbolKit` flags this at compile time).
 
-1. **Open Your Xcode Project**.
-2. **Navigate to the Swift Package Dependencies Tab**.
-3. **Select the SFSymbol Dependency**.
-4. **Click the "Update to Latest Package Versions" button**.
-
-## Conclusion
-
-You've successfully installed SFSymbol into your Xcode project. You can now use SF Symbols in your iOS, macOS, watchOS, or tvOS application with ease.
-
-For more advanced usage and customization options, please refer to the [Documentation](Documentation/Usage.md).
-
-If you encounter any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request on the [SFSymbol GitHub repository](https://github.com/LuckeyLogic/SFSymbol).
-
-Happy coding!
+If you hit something else, open an issue at <https://github.com/LuckeyLogic/SFSymbol/issues>.

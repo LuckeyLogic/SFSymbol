@@ -1,62 +1,84 @@
+# SFSymbol Usage
 
-# SFSymbol Documentation
+This package gives you type-safe access to Apple's full SF Symbols catalog (currently 7.2, ~7,800 symbols) from Swift. Two library products are available; pick one per target:
 
-Welcome to the SFSymbol documentation. This guide provides detailed information on using SFSymbol, including customization options and advanced usage. SFSymbol simplifies access to Apple's SF Symbols library, offering type-safe and dot-notation access to a wide range of icons for iOS, macOS, watchOS, and tvOS development.
+| Product | Style | Example |
+|---|---|---|
+| `SFSymbol`    | Flat enum, underscore names | `SFSymbol.star_fill.image` |
+| `SFSymbolKit` | Strict, dot-notation         | `SFSymbol.star.fill.image` |
 
-## Table of Contents
+Both expose a SwiftUI `Image` and a `String` for the symbol name. Both are generated from Apple's catalog and updated in lock-step on every SF Symbols release.
 
-1. [Introduction](#introduction)
-2. [Type-Safe Access](#type-safe-access)
-3. [Dot Notation](#dot-notation)
-4. [Comprehensive Icon Set](#comprehensive-icon-set)
-5. [Cross-Platform Compatibility](#cross-platform-compatibility)
-6. [Customization](#customization)
-7. [Usage Examples](#usage-examples)
+## Type safety
 
-## Introduction
+### Legacy `SFSymbol`
 
-Apple introduced SF Symbols to provide developers with a comprehensive set of symbols for use in their applications. However, working with these symbols in code can be cumbersome due to the need to remember specific names and ensuring they match correctly.
-
-SFSymbol makes working with SF Symbols more straightforward and less error-prone by providing an easy-to-use Swift enum that includes all available symbols. You can access symbols using a simple dot-notation syntax, making it intuitive and type-safe.
-
-## Type-Safe Access
-
-SFSymbol provides a type-safe way to access SF Symbols, preventing typos and compile-time errors in your code. This ensures that you always use valid symbol names.
+Each symbol is an enum case. Typos won't compile:
 
 ```swift
-let starImage = SFSymbol.star_fill.image
+SFSymbol.star_fill.image    // ✅ valid
+SFSymbol.starr_fill.image   // ❌ compile error
 ```
 
-## Dot Notation
+`@available(iOS 13.0, *)` is declared once on the enum. Symbols introduced in newer SF Symbols releases will compile on iOS 13 but render blank at runtime.
 
-Access symbols using dot notation for improved readability and discoverability. This allows you to quickly identify and use the symbols you need.
+### New `SFSymbolKit`
+
+Each symbol path is a chain of nested namespaces. Invalid combinations don't compile, *and* per-symbol availability is enforced at compile time:
 
 ```swift
-let heartImage = SFSymbol.heart_fill.image
+SFSymbol.star.fill.image                 // ✅ valid
+SFSymbol.star.bogus.fill.image           // ❌ compile error
+SFSymbol.apple.image.playground.image    // ❌ compile error if you target iOS 17 — symbol is iOS 18+
 ```
 
-## Comprehensive Icon Set
+If your deployment target is too low for a symbol, the compiler tells you instead of letting it ship and silently render blank.
 
-SFSymbol includes a wide range of SF Symbols covering various categories, ensuring you have the right symbol for your needs. Explore the extensive icon set to find the perfect symbol for your app.
+## Reading the symbol name
 
-## Cross-Platform Compatibility
+```swift
+// Legacy
+let s: String = SFSymbol.heart_fill.description   // "heart.fill"
 
-SFSymbol is compatible with iOS, macOS, watchOS, and tvOS projects, making it versatile for multi-platform development.
+// SFSymbolKit
+let s: String = SFSymbol.heart.fill.name          // "heart.fill"
+```
+
+The legacy enum conforms to `RawRepresentable` (`String`) and `CustomStringConvertible`. `SFSymbolKit` does not — it uses caseless enums for namespacing, which can't be values, so it exposes static `name` and `image` accessors at each leaf instead.
 
 ## Customization
 
-You can easily customize symbols with modifiers like `.image`, `.font`, `.foregroundColor`, and more. Tailor symbols to match your app's design and style.
+The `image` accessor returns a SwiftUI `Image`, so you can apply any standard SwiftUI modifier:
 
 ```swift
-let customImage = SFSymbol.star_fill
-    .image
-    .resizable()
-    .scaledToFit()
-    .foregroundColor(.blue)
+import SwiftUI
+import SFSymbolKit  // or `import SFSymbol`
+
+struct ContentView: View {
+    var body: some View {
+        SFSymbol.star.fill.image           // SFSymbolKit
+            .resizable()
+            .scaledToFit()
+            .foregroundColor(.blue)
+            .frame(width: 50, height: 50)
+    }
+}
 ```
 
-## Usage Examples
+For UIKit/AppKit, use the `name` (or `description` on the legacy enum) and pass it to `UIImage(systemName:)` / `NSImage(systemSymbolName:)` yourself.
 
-For usage examples and code snippets, please refer to the [Usage Examples](UsageExamples.md) section.
+## Escape rules (`SFSymbolKit` only)
 
-For any questions, issues, or suggestions, don't hesitate to reach out on the [SFSymbol GitHub repository](https://github.com/LuckeyLogic/SFSymbol). Happy coding!
+Three small rules let Swift identifiers handle cases that don't map cleanly:
+
+1. **Leading-digit segments → `_` prefix.** `4k.tv` → `SFSymbol._4k.tv`.
+2. **Swift keyword segments → backticks.** `repeat` → `` SFSymbol.`repeat` ``. Same for `case`, `return`, `in`, `switch`, `open`, `extension`, `indirect`, `subscript`.
+3. **`doc.text.image` collision → trailing underscore.** Both `doc.text` and `doc.text.image` are real symbols; the deeper one is reached as `SFSymbol.doc.text.image_`. This is the only such collision in the current catalog.
+
+The legacy `SFSymbol` collapses all of these by replacing dots with underscores: `SFSymbol._4k_tv`, `SFSymbol._repeat`, `SFSymbol.doc_text_image`.
+
+## More
+
+- [Installation](Installation.md)
+- [Usage examples](UsageExamples.md)
+- [Migration guide (legacy → SFSymbolKit)](Migration.md)
