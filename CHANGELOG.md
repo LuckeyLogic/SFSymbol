@@ -6,22 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-05-07
+
 ### Added
-- Initial release of the SFSymbol Swift package.
-- Support for the complete set of SF Symbols as of version 5.0.
-- Type-safe and dot-notation access to SF Symbols.
-- Compatibility with iOS, macOS, watchOS, and tvOS.
-- Documentation on installation, usage, and customization.
+- New `SFSymbolKit` library product — type-safe, dot-notation API: `SFSymbol.star.fill.image`. Uses nested caseless enums so only Apple-published variants are reachable; invalid combinations are compile errors.
+- Per-symbol `@available` annotations in `SFSymbolKit`, so symbols introduced in newer SF Symbols releases are gated to the correct minimum OS version.
+- `Tools/generate.py` — single source of truth that regenerates both libraries from `/Applications/SF Symbols.app/Contents/Resources/Metadata/name_availability.plist`. Run after any SF Symbols release.
+- `Documentation/Migration.md` — guide for moving from the underscore API to `SFSymbolKit`.
+- `Tests/SFSymbolTests/` — XCTest suite exercising both APIs, the keyword/digit escape rules, and the `doc.text.image` collision case.
 
 ### Changed
+- `SFSymbol` updated from SF Symbols 5.0 to **7.2 (build 119)** — adds 2,420 new symbols. No existing case names removed; this is a pure superset.
+- `Package.swift` now declares platforms (`iOS 13`, `macOS 11`, `watchOS 6`, `tvOS 13`). macOS minimum is 11 because `SwiftUI.Image(systemName:)` is macOS 11+.
+- The `SFSymbol` enum is now generated; do not edit `Sources/SFSymbol/SFSymbol.swift` by hand.
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+## [1.1.0] - 2023-12-06
 
 ## [1.0.0] - 2023-12-05
 

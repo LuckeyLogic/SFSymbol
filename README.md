@@ -4,67 +4,90 @@
 
 # SFSymbol
 
-SFSymbol is a Swift package that simplifies access to Apple's SF Symbols library, offering type-safe and dot-notation access to a wide range of icons for iOS, macOS, watchOS, and tvOS development. Enhance your app's user interface with ease.
+Type-safe access to Apple's SF Symbols catalog from Swift, for iOS, macOS, watchOS, and tvOS. Two flavors:
 
-## Introduction
+- **`SFSymbol`** — flat enum with underscore-style names: `SFSymbol.star_fill.image`
+- **`SFSymbolKit`** — strict, nested dot-notation API: `SFSymbol.star.fill.image`
 
-Apple introduced SF Symbols as a way to provide developers with a comprehensive set of symbols for use in their applications. However, working with these symbols in code can be cumbersome due to the need to remember specific names and ensuring they match correctly.
+Both are generated from Apple's catalog (currently **SF Symbols 7.2**) by the same script, so they stay in lock-step on every Apple release.
 
-SFSymbol makes working with SF Symbols more straightforward and less error-prone by providing an easy-to-use Swift enum that includes all available symbols. You can access symbols using a simple dot-notation syntax, making it intuitive and type-safe.
+## Pick one
 
-## Features
+```swift
+// Package.swift
+.package(url: "https://github.com/LuckeyLogic/SFSymbol", from: "2.0.0"),
 
-- **Type-Safe**: SFSymbol provides a type-safe way to access SF Symbols, preventing typos and compile-time errors in your code.
+// Then add ONE of these to your target's dependencies:
+.product(name: "SFSymbol",    package: "SFSymbol"),  // legacy underscore API
+.product(name: "SFSymbolKit", package: "SFSymbol"),  // new dot-notation API
+```
 
-- **Dot Notation**: Access symbols using dot notation for improved readability and discoverability.
-
-- **Comprehensive**: Includes a wide range of SF Symbols covering various categories, ensuring you have the right symbol for your needs.
-
-- **Cross-Platform**: Compatible with iOS, macOS, watchOS, and tvOS projects.
-
-- **Customization**: Easily customize symbols with modifiers like `.image`, `.font`, `.foregroundColor`, and more.
-
-## Usage
-
-Using SFSymbol in your project is straightforward:
-
-1. Add SFSymbol as a Swift package dependency.
-2. Import the SFSymbol module.
-3. Access SF Symbols using dot notation, e.g., `SFSymbol.star_fill.image`.
+### `SFSymbol` (legacy, underscore)
 
 ```swift
 import SFSymbol
 
-let starImage = SFSymbol.star_fill.image
+let starImage:  Image  = SFSymbol.star_fill.image
+let arrowImage: Image  = SFSymbol.square_and_arrow_up.image
+let name:       String = SFSymbol.heart_fill.description  // "heart.fill"
 ```
 
-For more advanced usage and customization, refer to the [Documentation](#documentation) section.
+### `SFSymbolKit` (new, dot-notation)
+
+```swift
+import SFSymbolKit
+
+let starImage:  Image  = SFSymbol.star.fill.image
+let arrowImage: Image  = SFSymbol.square.and.arrow.up.image
+let name:       String = SFSymbol.heart.fill.name         // "heart.fill"
+```
+
+The dot-notation API gives you:
+
+- **Type-safe combinations** — `SFSymbol.star.bogus` won't compile.
+- **Per-symbol availability** — `@available` is annotated per symbol, so the compiler tells you when a SF Symbols 6/7 symbol isn't available on your deployment target.
+- **Narrower autocomplete** — typing `SFSymbol.star.` only shows valid `star.*` continuations.
+
+See [Documentation/Migration.md](Documentation/Migration.md) for a full mapping between the two APIs and the three small escape rules (leading-digit segments, Swift keywords, the `doc.text.image` collision).
+
+## Why both?
+
+Existing apps using the legacy `SFSymbol` keep working — no breaking changes. The new `SFSymbolKit` is opt-in via a separate Swift module, so the underscore names never bleed into the new namespace and vice versa.
+
+Both are regenerated from Apple's `name_availability.plist` on every SF Symbols release; maintaining both has zero marginal cost.
+
+## Updating to a new SF Symbols release
+
+```bash
+python3 Tools/generate.py
+swift test
+```
+
+The script reads `/Applications/SF Symbols.app/Contents/Resources/Metadata/name_availability.plist` and rewrites both libraries.
 
 ## Installation
 
-You can add SFSymbol to your project via Swift Package Manager or manually. Refer to the [Installation Guide](Documentation/Installation.md) for detailed instructions.
+See [Documentation/Installation.md](Documentation/Installation.md).
 
 ## Documentation
 
-For detailed information on using SFSymbol, including customization options and advanced usage, please refer to the [Documentation](Documentation/Usage.md).
+- [Usage](Documentation/Usage.md)
+- [Examples](Documentation/UsageExamples.md)
+- [Migration guide (legacy → SFSymbolKit)](Documentation/Migration.md)
 
 ## License
 
-SFSymbol is available under the [MIT License](LICENSE). You are free to use this package in your applications, even for commercial purposes, without open-sourcing your entire application. Please see the [License](LICENSE) file for more information.
+MIT — see [LICENSE](LICENSE).
 
 ## Contributions
 
-Contributions to SFSymbol are welcome! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request. Please refer to the [Contribution Guide](CONTRIBUTING.md) for detailed instructions.
+Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Connect with Luckey Logic
 
-Stay updated and connect with us on our website and social media platforms:
-
-- Website: [Luckey Logic](https://luckeylogic.com/)
+- Website: [luckeylogic.com](https://luckeylogic.com/)
 - [Instagram](https://www.instagram.com/luckeylogic)
 - [Facebook](https://www.facebook.com/luckeylogic)
 - [TikTok](https://www.tiktok.com/@luckeylogic)
 - [YouTube](https://www.youtube.com/channel/UCYpu2dcEZ6VRi_DZtKV34ZQ)
 - [LinkedIn](https://www.linkedin.com/company/luckeylogic)
-
-Follow us for the latest updates, insights, and more.

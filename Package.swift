@@ -5,18 +5,25 @@ import PackageDescription
 
 let package = Package(
     name: "SFSymbol",
+    platforms: [
+        .iOS(.v13),
+        .macOS(.v11),
+        .watchOS(.v6),
+        .tvOS(.v13),
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "SFSymbol",
-            targets: ["SFSymbol"]),
+        // Legacy underscore API: `SFSymbol.star_fill.image`.
+        .library(name: "SFSymbol", targets: ["SFSymbol"]),
+        // Type-safe dot-notation API: `SFSymbol.star.fill.image`.
+        .library(name: "SFSymbolKit", targets: ["SFSymbolKit"]),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "SFSymbol",
-        dependencies: [],
-        path: "Sources/SFSymbol"),
+        .target(name: "SFSymbol", path: "Sources/SFSymbol"),
+        .target(name: "SFSymbolKit", path: "Sources/SFSymbolKit"),
+        .testTarget(
+            name: "SFSymbolTests",
+            dependencies: ["SFSymbol", "SFSymbolKit"],
+            path: "Tests/SFSymbolTests"
+        ),
     ]
 )
