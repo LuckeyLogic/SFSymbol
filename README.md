@@ -4,6 +4,10 @@
 
 # SFSymbol
 
+[![Swift](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FLuckeyLogic%2FSFSymbol%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/LuckeyLogic/SFSymbol)
+[![Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FLuckeyLogic%2FSFSymbol%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/LuckeyLogic/SFSymbol)
+[![License](https://img.shields.io/github/license/LuckeyLogic/SFSymbol)](LICENSE)
+
 Type-safe access to Apple's SF Symbols catalog from Swift, for iOS, macOS, watchOS, and tvOS. Two flavors:
 
 - **`SFSymbol`** — flat enum with underscore-style names: `SFSymbol.star_fill.image`
